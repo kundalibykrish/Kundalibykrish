@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Jyotish Kundali</title>
-    <link rel="stylesheet" href="style.css"> </head>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
 
     <header>
@@ -14,28 +15,15 @@
     <main>
         <section id="input-section">
             <h2>Input Kundali Data</h2>
-            <div id="kundali-grid">
-                <p>Kundali chart will appear here.</p>
+            <div id="kundali-container">
+                <div id="kundali-grid">
+                    </div>
             </div>
             
-            <div id="data-entry">
-                <label for="planet-select">Select Planet:</label>
-                <select id="planet-select">
-                    <option value="">--Select--</option>
-                    <option value="surya">Surya (Sun)</option>
-                    <option value="chandra">Chandra (Moon)</option>
-                    <option value="mangal">Mangal (Mars)</option>
-                    <option value="budh">Budh (Mercury)</option>
-                    <option value="guru">Guru (Jupiter)</option>
-                    <option value="shukra">Shukra (Venus)</option>
-                    <option value="shani">Shani (Saturn)</option>
-                    <option value="rahu">Rahu</option>
-                    <option value="ketu">Ketu</option>
-                </select>
-
-                <label for="house-select">Select Rashi (House):</label>
-                <select id="house-select">
-                    <option value="">--Select--</option>
+            <div id="control-panel">
+                <label for="lagna-select">Select Lagna Rashi (House 1):</label>
+                <select id="lagna-select">
+                    <option value="">--Select Lagna--</option>
                     <option value="1">1 (Mesh)</option>
                     <option value="2">2 (Vrishabh)</option>
                     <option value="3">3 (Mithun)</option>
@@ -50,15 +38,29 @@
                     <option value="12">12 (Meen)</option>
                 </select>
 
-                <button id="add-planet-btn">Add Planet</button>
+                <label for="planet-select">Select Planet to Add:</label>
+                <select id="planet-select">
+                    <option value="">--Select Planet--</option>
+                    <option value="surya">Su</option>
+                    <option value="chandra">Ch</option>
+                    <option value="mangal">Ma</option>
+                    <option value="budh">Bu</option>
+                    <option value="guru">Gu</option>
+                    <option value="shukra">Shu</option>
+                    <option value="shani">Sh</option>
+                    <option value="rahu">Ra</option>
+                    <option value="ketu">Ke</option>
+                </select>
+                
                 <button id="analyze-btn">Analyze Kundali</button>
+                <button id="reset-btn">Reset</button>
             </div>
         </section>
 
         <section id="output-section">
             <h2>Kundali Analysis</h2>
             <div id="analysis-results">
-                <p>Your Kundali analysis will be displayed here after you click "Analyze Kundali".</p>
+                <p>Your Kundali analysis will be displayed here.</p>
             </div>
         </section>
     </main>
@@ -68,5 +70,7 @@
     </footer>
 
     <script src="data.js"></script>
-    <script src="script.js"></script> </body>
+    <script src="script.js"></script>
+
+</body>
 </html>
