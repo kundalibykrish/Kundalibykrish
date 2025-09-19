@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Jyotish Kundali</title>
+    <link rel="stylesheet" href="style.css"> </head>
+<body>
+
+    <header>
+        <h1>Jyotish Kundali Analyzer</h1>
+    </header>
+
+    <main>
+        <section id="input-section">
+            <h2>Input Kundali Data</h2>
+            <div id="kundali-grid">
+                <p>Kundali chart will appear here.</p>
+            </div>
+            
+            <div id="data-entry">
+                <label for="planet-select">Select Planet:</label>
+                <select id="planet-select">
+                    <option value="">--Select--</option>
+                    <option value="surya">Surya (Sun)</option>
+                    <option value="chandra">Chandra (Moon)</option>
+                    <option value="mangal">Mangal (Mars)</option>
+                    <option value="budh">Budh (Mercury)</option>
+                    <option value="guru">Guru (Jupiter)</option>
+                    <option value="shukra">Shukra (Venus)</option>
+                    <option value="shani">Shani (Saturn)</option>
+                    <option value="rahu">Rahu</option>
+                    <option value="ketu">Ketu</option>
+                </select>
+
+                <label for="house-select">Select Rashi (House):</label>
+                <select id="house-select">
+                    <option value="">--Select--</option>
+                    <option value="1">1 (Mesh)</option>
+                    <option value="2">2 (Vrishabh)</option>
+                    <option value="3">3 (Mithun)</option>
+                    <option value="4">4 (Karkat)</option>
+                    <option value="5">5 (Sinha)</option>
+                    <option value="6">6 (Kanya)</option>
+                    <option value="7">7 (Tula)</option>
+                    <option value="8">8 (Vrishchik)</option>
+                    <option value="9">9 (Dhanu)</option>
+                    <option value="10">10 (Makar)</option>
+                    <option value="11">11 (Kumbha)</option>
+                    <option value="12">12 (Meen)</option>
+                </select>
+
+                <button id="add-planet-btn">Add Planet</button>
+                <button id="analyze-btn">Analyze Kundali</button>
+            </div>
+        </section>
+
+        <section id="output-section">
+            <h2>Kundali Analysis</h2>
+            <div id="analysis-results">
+                <p>Your Kundali analysis will be displayed here after you click "Analyze Kundali".</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Kundali by Krish</p>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script> </body>
+</html>
