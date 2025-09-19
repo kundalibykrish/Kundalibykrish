@@ -5,18 +5,23 @@ body {
     line-height: 1.6;
     margin: 0;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 header {
     text-align: center;
     padding-bottom: 20px;
     border-bottom: 2px solid #ddd;
+    width: 100%;
+    max-width: 900px;
     margin-bottom: 20px;
 }
 
 main {
     max-width: 900px;
-    margin: auto;
+    width: 100%;
 }
 
 section {
@@ -34,93 +39,286 @@ h2 {
     margin-top: 0;
 }
 
-/* Kundali Grid Container */
+/* --- Kundali Chart Styles --- */
+#kundali-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+}
+
 #kundali-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+    position: relative;
     width: 500px;
     height: 500px;
-    margin: 20px auto;
     border: 2px solid #000;
 }
 
-/* Individual Kundali House */
+/* Center diamond shape */
+#kundali-grid::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 354px; /* sqrt(2 * 250^2) */
+    height: 354px; /* sqrt(2 * 250^2) */
+    transform: translate(-50%, -50%) rotate(45deg);
+    border: 2px solid #000;
+    z-index: 1;
+}
+
+/* Individual houses */
 .house {
-    border: 1px solid #000;
-    text-align: center;
+    position: absolute;
+    border: 1px solid transparent; /* default */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+    z-index: 2; /* To be above the diamond lines */
+}
+
+/* House 1 */
+.house-1 {
+    width: 33%;
+    height: 33%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: none;
+}
+
+/* Houses on the border */
+.house-2, .house-3, .house-4, .house-5, .house-6, .house-7, .house-8, .house-9, .house-10, .house-11, .house-12 {
+    width: 250px;
+    height: 125px;
+    border: 2px solid #000;
+}
+
+.house-1 { border: 2px solid #000; width: 250px; height: 250px; }
+.house-2 { top: 250px; left: 0; }
+.house-3 { top: 375px; left: 0; border: none; } /* special case for corners */
+.house-4 { top: 375px; left: 125px; }
+.house-5 { top: 375px; left: 250px; }
+.house-6 { top: 375px; left: 375px; border: none; } /* special case for corners */
+.house-7 { top: 250px; left: 375px; }
+.house-8 { top: 125px; left: 375px; border: none; }
+.house-9 { top: 0; left: 375px; }
+.house-10 { top: 0; left: 250px; }
+.house-11 { top: 0; left: 125px; }
+.house-12 { top: 0; left: 0; border: none; }
+.house-2, .house-12 { top: 250px; left: 0; }
+
+.house-2 { top: 250px; left: 0; }
+.house-3 { top: 375px; left: 0; width: 125px; height: 125px; border: none; }
+.house-4 { top: 375px; left: 125px; width: 250px; height: 125px; }
+.house-5 { top: 375px; left: 250px; width: 125px; height: 125px; border: none; }
+.house-6 { top: 250px; left: 375px; width: 125px; height: 125px; border: none; }
+.house-7 { top: 250px; left: 375px; }
+.house-8 { top: 125px; left: 375px; width: 125px; height: 125px; border: none; }
+.house-9 { top: 0; left: 375px; }
+.house-10 { top: 0; left: 250px; }
+.house-11 { top: 0; left: 125px; }
+.house-12 { top: 0; left: 0; width: 125px; height: 125px; border: none; }
+.house-center-top { top: 125px; left: 125px; width: 250px; height: 125px; }
+.house-center-bottom { top: 250px; left: 125px; width: 250px; height: 125px; }
+
+/* The correct way to position houses for the traditional look */
+.house {
+    background-color: #fff;
+    border: 1px solid #000;
+}
+
+#kundali-grid {
     position: relative;
-    background-color: #f9f9f9;
+    width: 400px;
+    height: 400px;
+    border: 2px solid #000;
+    margin: auto;
+}
+
+/* Correct positioning using transforms and absolute positioning */
+.house {
+    position: absolute;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
 }
 
 .house-number {
     position: absolute;
     top: 5px;
     left: 5px;
+    font-size: 0.8em;
     font-weight: bold;
-    color: #777;
 }
 
 .planet-initials {
-    font-size: 1.2em;
+    margin-top: 20px;
     font-weight: bold;
-    margin-top: 15px;
 }
 
-/* Specific grid areas for the Kundali houses */
-.house-1 { grid-area: 4 / 3 / 5 / 4; }
-.house-2 { grid-area: 4 / 2 / 5 / 3; }
-.house-3 { grid-area: 4 / 1 / 5 / 2; }
-.house-4 { grid-area: 3 / 1 / 4 / 2; }
-.house-5 { grid-area: 2 / 1 / 3 / 2; }
-.house-6 { grid-area: 1 / 1 / 2 / 2; }
-.house-7 { grid-area: 1 / 2 / 2 / 3; }
-.house-8 { grid-area: 1 / 3 / 2 / 4; }
-.house-9 { grid-area: 1 / 4 / 2 / 5; }
-.house-10 { grid-area: 2 / 4 / 3 / 5; }
-.house-11 { grid-area: 3 / 4 / 4 / 5; }
-.house-12 { grid-area: 4 / 4 / 5 / 5; }
+/* Houses and their precise positioning to form the diamond chart */
+.house-1 {
+    width: 200px; height: 200px; top: 100px; left: 100px;
+    border-top: none; border-left: none;
+}
+.house-2 {
+    width: 100px; height: 100px; top: 200px; left: 0;
+    border-bottom: none; border-left: none;
+}
+.house-3 {
+    width: 100px; height: 100px; top: 300px; left: 0;
+    border-top: none; border-left: none;
+}
+.house-4 {
+    width: 200px; height: 100px; top: 300px; left: 100px;
+    border-top: none; border-left: none; border-right: none;
+}
+.house-5 {
+    width: 100px; height: 100px; top: 300px; left: 300px;
+    border-top: none; border-right: none;
+}
+.house-6 {
+    width: 100px; height: 100px; top: 200px; left: 300px;
+    border-right: none; border-bottom: none;
+}
+.house-7 {
+    width: 200px; height: 200px; top: 100px; left: 100px;
+    border: none;
+}
+.house-8 {
+    width: 100px; height: 100px; top: 0; left: 300px;
+    border-left: none; border-top: none;
+}
+.house-9 {
+    width: 100px; height: 100px; top: 0; left: 200px;
+    border-left: none; border-right: none; border-top: none;
+}
+.house-10 {
+    width: 100px; height: 100px; top: 0; left: 100px;
+    border-left: none; border-right: none; border-top: none;
+}
+.house-11 {
+    width: 100px; height: 100px; top: 0; left: 0;
+    border-left: none; border-top: none;
+}
+.house-12 {
+    width: 100px; height: 100px; top: 100px; left: 0;
+    border-left: none; border-top: none; border-bottom: none;
+}
 
-/* The central four houses are empty in this design */
-.house-center-1 { grid-area: 2 / 2 / 3 / 3; }
-.house-center-2 { grid-area: 2 / 3 / 3 / 4; }
-.house-center-3 { grid-area: 3 / 2 / 4 / 3; }
-.house-center-4 { grid-area: 3 / 3 / 4 / 4; }
+/* The true diamond structure using pseudoelements and borders */
+#kundali-grid {
+    position: relative;
+    width: 400px;
+    height: 400px;
+}
+.house {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 5px;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+.house-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.rashi-number {
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #555;
+}
+.planet-initials {
+    font-weight: bold;
+    margin-top: 5px;
+    white-space: nowrap; /* Keep initials on one line */
+}
 
-/* Input and buttons styling */
-#data-entry {
+/* --- Positioning for the diamond-shaped houses --- */
+/* The key is to use absolute positioning on a relative container */
+.house-1 { bottom: 120px; left: 160px; }
+.house-2 { bottom: 0px; left: 100px; }
+.house-3 { bottom: 0px; left: 0px; }
+.house-4 { bottom: 100px; left: 0px; }
+.house-5 { bottom: 200px; left: 0px; }
+.house-6 { bottom: 300px; left: 0px; }
+.house-7 { bottom: 300px; left: 100px; }
+.house-8 { bottom: 300px; left: 200px; }
+.house-9 { bottom: 200px; left: 300px; }
+.house-10 { bottom: 100px; left: 300px; }
+.house-11 { bottom: 0px; left: 300px; }
+.house-12 { bottom: 0px; left: 200px; }
+
+/* The central rhombus */
+#kundali-grid::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 280px;
+    height: 280px;
+    transform: translate(-50%, -50%) rotate(45deg);
+    border: 2px solid #000;
+}
+
+/* --- Control Panel and Analysis Section --- */
+#control-panel {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
     align-items: center;
+    margin-top: 20px;
 }
 
-#data-entry label {
+#control-panel label {
     font-weight: bold;
 }
 
-#data-entry select,
-#data-entry button {
+#control-panel select,
+#control-panel button {
     padding: 8px;
     border-radius: 5px;
     border: 1px solid #ccc;
     cursor: pointer;
 }
 
-#data-entry button {
+#control-panel button {
     background-color: #4CAF50;
     color: white;
     border: none;
     font-weight: bold;
 }
 
-#data-entry button:hover {
+#control-panel button:hover {
     background-color: #45a049;
 }
 
-/* Analysis results section */
+#reset-btn {
+    background-color: #f44336;
+}
+
+#reset-btn:hover {
+    background-color: #da190b;
+}
+
 #analysis-results {
     white-space: pre-wrap;
     background-color: #f0f8ff;
@@ -134,4 +332,5 @@ footer {
     padding-top: 20px;
     border-top: 2px solid #ddd;
     margin-top: 20px;
+    width: 100%;
 }
