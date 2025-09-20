@@ -1,197 +1,51 @@
-// A map to store the position of each planet in the kundali
-let kundaliChart = {};
-let grahaInHouse = {}; // Store an array of planets for each house
+// script.js
 
-// A map to store the full name for each planet initial
-const planetInitialMap = {
-  surya: "Su",
-  chandra: "Ch",
-  mangal: "Ma",
-  budh: "Bu",
-  guru: "Gu",
-  shukra: "Shu",
-  shani: "Sh",
-  rahu: "Ra",
-  ketu: "Ke",
-};
+function generateKundali() {
+  let lagna = document.getElementById("lagna").value;
+  let grahaInput = document.getElementById("grahaInput").value;
 
-// --- DOM Elements ---
-const kundaliGrid = document.getElementById("kundali-grid");
-const lagnaSelect = document.getElementById("lagna-select");
-const planetSelect = document.getElementById("planet-select");
-const analyzeBtn = document.getElementById("analyze-btn");
-const resetBtn = document.getElementById("reset-btn");
-const analysisResults = document.getElementById("analysis-results");
+  const grahaNepali = {
+    surya: "सूर्य", chandra: "चन्द्रमा", mangal: "मङ्गल",
+    budh: "बुध", guru: "गुरु", shukra: "शुक्र",
+    shani: "शनि", rahu: "राहु", ketu: "केतु"
+  };
+  const rashiNepali = ["","मेष","वृष","मिथुन","कर्कट","सिंह","कन्या","तुला","वृश्चिक","धनु","मकर","कुम्भ","मीन"];
 
-// --- Functions ---
+  document.getElementById("intro").innerHTML = `<h3>परिचय</h3><p>लग्न राशि: <b>${rashiNepali[lagna]}</b></p>`;
 
-// Function to create the Kundali chart houses and set Lagna
-function createKundaliChart(lagnaRashi) {
-  kundaliGrid.innerHTML = ''; // Clear previous content
-  grahaInHouse = {}; // Reset planet storage
+  let entries = grahaInput.split(",");
+  let explanations = "";
 
-  // House order based on the visual layout
-  const visualHouses = [3, 4, 5, 6, 2, 1, 7, 12, 11, 10, 9, 8];
-  
-  // Rashi numbers for each visual house based on the selected Lagna
-  let rashiNumbers = {};
-  for (let i = 0; i < 12; i++) {
-    const houseNumber = (i + 1);
-    const rashiNumber = (lagnaRashi + i - 1) % 12 + 1;
-    rashiNumbers[houseNumber] = rashiNumber;
-  }
+  entries.forEach(e => {
+    let [gNameNep, house] = e.split(":").map(s => s.trim());
+    if(!gNameNep || !house) return;
 
-  // Create each house element
-  visualHouses.forEach(houseNumber => {
-    const house = document.createElement("div");
-    house.classList.add("house", `house-${houseNumber}`);
+    let key = Object.keys(grahaNepali).find(k => grahaNepali[k] === gNameNep);
+    if(!key) return;
 
-    const rashiNumber = document.createElement("div");
-    rashiNumber.classList.add("rashi-number");
-    rashiNumber.textContent = rashiNumbers[houseNumber];
-    house.appendChild(rashiNumber);
+    house = parseInt(house);
 
-    const planetDiv = document.createElement("div");
-    planetDiv.classList.add("planet-initials");
-    house.appendChild(planetDiv);
+    // स्थिति
+    let statusObj = jyotishData.grahaStatus[key];
+    let state = "सामान्य स्थिति";
+    if(Array.isArray(statusObj.uchha) ? statusObj.uchha.includes(house) : statusObj.uchha === house) state = "उच्च (बलवान)";
+    else if(Array.isArray(statusObj.nicha) ? statusObj.nicha.includes(house) : statusObj.nicha === house) state = "नीच (दुर्बल)";
+    else if(statusObj.swagriha.includes(house)) state = "स्वगृही (आफ्नो घरमा)";
 
-    // Add a click listener to the house for adding planets
-    house.addEventListener("click", () => addPlanetToHouse(houseNumber));
-    
-    kundaliGrid.appendChild(house);
+    // मित्र/शत्रु
+    let friends = jyotishData.grahaRelationships[key].mitra.map(g => grahaNepali[g]).join(", ");
+    let enemies = jyotishData.grahaRelationships[key].shatru.map(g => grahaNepali[g]).join(", ");
+
+    // दृष्टि
+    let drishtiHouses = jyotishData.grahaDrishti[key] || jyotishData.grahaDrishti.common;
+    let drishtiRashi = drishtiHouses.map(h => rashiNepali[((house + h -1)%12)+1]).join(", ");
+
+    explanations += `<p><b>${gNameNep}</b> (${rashiNepali[house]}) → स्थिति: <b>${state}</b>, मित्र ग्रह: ${friends}, शत्रु ग्रह: ${enemies}, दृष्टि हुने भाव: ${drishtiRashi}</p>`;
   });
 
-  // Re-populate chart with existing planets if any
-  updateKundaliChart();
+  document.getElementById("graha").innerHTML = `<h3>ग्रह विश्लेषण</h3>${explanations}`;
+  document.getElementById("lagnaExp").innerHTML = `<h3>लग्नको व्याख्या</h3><p>${rashiNepali[lagna]} लग्न भएको व्यक्तिको स्वभाव र जीवनदिशा त्यहीअनुसार रहनेछ।</p>`;
+  document.getElementById("houses").innerHTML = `<h3>भावगत व्याख्या</h3><p>प्रत्येक भावमा ग्रहको प्रभाव माथि दिइएको छ।</p>`;
+  document.getElementById("yogas").innerHTML = `<h3>योग र दृष्टि</h3><p>विशेष योग तथा दृष्टिहरू ग्रह अनुसार बनाइएका छन्।</p>`;
+  document.getElementById("remedies").innerHTML = `<h3>उपाय</h3><p>ग्रह अनुसार मन्त्र, पूजा वा जीवनशैली सल्लाह दिइनेछ।</p>`;
 }
-
-// Function to update the Kundali chart with planets
-function updateKundaliChart() {
-    // Clear all planets from the chart
-    document.querySelectorAll(".planet-initials").forEach(div => div.textContent = "");
-
-    // Place planets in their respective houses
-    for (const houseNumber in grahaInHouse) {
-        const planets = grahaInHouse[houseNumber];
-        const houseElement = document.querySelector(`.house-${houseNumber} .planet-initials`);
-        if (houseElement) {
-            houseElement.textContent = planets.map(p => planetInitialMap[p]).join(', ');
-        }
-    }
-}
-
-// Function to handle adding a planet to a house
-function addPlanetToHouse(houseNumber) {
-    const selectedPlanet = planetSelect.value;
-    if (!selectedPlanet) {
-        alert("Please select a planet first.");
-        return;
-    }
-
-    if (!grahaInHouse[houseNumber]) {
-        grahaInHouse[houseNumber] = [];
-    }
-
-    // Check if the planet is already in the house
-    if (grahaInHouse[houseNumber].includes(selectedPlanet)) {
-        alert("This planet is already in this house. Please choose another.");
-        return;
-    }
-
-    grahaInHouse[houseNumber].push(selectedPlanet);
-    updateKundaliChart();
-}
-
-
-// Function to reset the entire chart
-function resetKundali() {
-  lagnaSelect.value = "";
-  kundaliChart = {};
-  grahaInHouse = {};
-  analysisResults.textContent = "Your Kundali analysis will be displayed here.";
-  createKundaliChart(1); // Default back to Lagna 1
-}
-
-// --- Main Analysis Logic ---
-function analyzeKundali() {
-  const lagnaRashi = parseInt(lagnaSelect.value);
-  if (!lagnaRashi) {
-    analysisResults.textContent = "Please select a Lagna Rashi first.";
-    return;
-  }
-  
-  let analysisText = "";
-
-  // 1. Analyze Planetary Status (Uchha, Nicha, Swagriha)
-  analysisText += "--- Planetary Status Analysis ---\n\n";
-  for (const houseNumber in grahaInHouse) {
-      const rashi = (lagnaRashi + parseInt(houseNumber) - 1) % 12 + 1;
-      const planetsInHouse = grahaInHouse[houseNumber];
-
-      planetsInHouse.forEach(planet => {
-          const statusData = jyotishData.grahaStatus[planet];
-          if (statusData) {
-              if (statusData.uchha === rashi) {
-                  analysisText += `${planetInitialMap[planet]} is in its **exalted** sign (${rashi}).\n`;
-              } else if (statusData.nicha === rashi) {
-                  analysisText += `${planetInitialMap[planet]} is in its **debilitated** sign (${rashi}).\n`;
-              } else if (statusData.swagriha && statusData.swagriha.includes(rashi)) {
-                  analysisText += `${planetInitialMap[planet]} is in its **own house** (${rashi}).\n`;
-              }
-          }
-      });
-  }
-
-  // 2. Analyze Planetary Aspects (Drishti)
-  analysisText += "\n--- Planetary Aspects (Drishti) ---\n\n";
-  for (const houseNumber1 in grahaInHouse) {
-      const planets1 = grahaInHouse[houseNumber1];
-      const rashi1 = (lagnaRashi + parseInt(houseNumber1) - 1) % 12 + 1;
-
-      planets1.forEach(planet1 => {
-          const aspects = [...jyotishData.grahaDrishti.common, ...(jyotishData.grahaDrishti[planet1] || [])];
-          
-          for (const houseNumber2 in grahaInHouse) {
-              if (houseNumber1 === houseNumber2) continue;
-              const planets2 = grahaInHouse[houseNumber2];
-              const rashi2 = (lagnaRashi + parseInt(houseNumber2) - 1) % 12 + 1;
-
-              planets2.forEach(planet2 => {
-                  const aspectedHouse = aspects.map(aspect => (parseInt(houseNumber1) + aspect - 1) % 12);
-                  
-                  if (aspectedHouse.includes(parseInt(houseNumber2) - 1)) {
-                      analysisText += `${planetInitialMap[planet1]} is aspecting ${planetInitialMap[planet2]} at house ${houseNumber2}. `;
-                      
-                      const relationship = jyotishData.grahaRelationships[planet1];
-                      if (relationship) {
-                          if (relationship.mitra.includes(planet2)) {
-                              analysisText += `They are **friends** (a positive aspect).\n`;
-                          } else if (relationship.shatru.includes(planet2)) {
-                              analysisText += `They are **enemies** (a challenging aspect).\n`;
-                          } else {
-                              analysisText += `They are **neutral** (a mixed aspect).\n`;
-                          }
-                      }
-                  }
-              });
-          }
-      });
-  }
-
-  analysisResults.textContent = analysisText.trim() || "No special conditions found in the provided Kundali data.";
-}
-
-// --- Event Listeners ---
-lagnaSelect.addEventListener("change", (e) => {
-  const selectedLagna = parseInt(e.target.value);
-  if (selectedLagna) {
-    createKundaliChart(selectedLagna);
-  }
-});
-analyzeBtn.addEventListener("click", analyzeKundali);
-resetBtn.addEventListener("click", resetKundali);
-
-// Initial creation of the kundali chart with a placeholder Lagna
-document.addEventListener("DOMContentLoaded", () => {
-  createKundaliChart(1);
-});
