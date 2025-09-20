@@ -1,76 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ne">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Jyotish Kundali</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>कुण्डली व्याख्या जेनरेटर</title>
+  <style>
+    body { font-family: "Noto Sans Devanagari", Arial, sans-serif; background: #fafafa; margin: 0; padding: 20px; }
+    h1, h2 { color: #4b2e83; }
+    .container { max-width: 900px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .kundali-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 20px; }
+    .house { border: 1px solid #aaa; min-height: 80px; text-align: center; padding: 5px; font-size: 14px; }
+    .form-section { margin-bottom: 20px; }
+    select, button { padding: 8px; font-size: 14px; margin-top: 10px; }
+    button { background: #4b2e83; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #371f62; }
+    .output { margin-top: 30px; padding: 20px; border: 1px solid #ddd; background: #f9f9f9; border-radius: 8px; }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>कुण्डली व्याख्या जेनरेटर</h1>
 
-    <header>
-        <h1>Jyotish Kundali Analyzer</h1>
-    </header>
+    <!-- Input Section -->
+    <div class="form-section">
+      <label for="lagna">लग्न राशि छान्नुहोस्:</label><br>
+      <select id="lagna">
+        <option value="">-- राशि छान्नुहोस् --</option>
+        <option>मेष</option>
+        <option>वृष</option>
+        <option>मिथुन</option>
+        <option>कर्कट</option>
+        <option>सिंह</option>
+        <option>कन्या</option>
+        <option>तुला</option>
+        <option>वृश्चिक</option>
+        <option>धनु</option>
+        <option>मकर</option>
+        <option>कुम्भ</option>
+        <option>मीन</option>
+      </select>
+    </div>
 
-    <main>
-        <section id="input-section">
-            <h2>Input Kundali Data</h2>
-            <div id="kundali-container">
-                <div id="kundali-grid">
-                    </div>
-            </div>
-            
-            <div id="control-panel">
-                <label for="lagna-select">Select Lagna Rashi (House 1):</label>
-                <select id="lagna-select">
-                    <option value="">--Select Lagna--</option>
-                    <option value="1">1 (Mesh)</option>
-                    <option value="2">2 (Vrishabh)</option>
-                    <option value="3">3 (Mithun)</option>
-                    <option value="4">4 (Karkat)</option>
-                    <option value="5">5 (Sinha)</option>
-                    <option value="6">6 (Kanya)</option>
-                    <option value="7">7 (Tula)</option>
-                    <option value="8">8 (Vrishchik)</option>
-                    <option value="9">9 (Dhanu)</option>
-                    <option value="10">10 (Makar)</option>
-                    <option value="11">11 (Kumbha)</option>
-                    <option value="12">12 (Meen)</option>
-                </select>
+    <!-- Kundali Grid Input -->
+    <div class="form-section">
+      <h2>ग्रहहरूको स्थान हाल्नुहोस्</h2>
+      <div class="kundali-grid" id="kundaliGrid">
+        <div class="house" data-house="1">भाव १</div>
+        <div class="house" data-house="2">भाव २</div>
+        <div class="house" data-house="3">भाव ३</div>
+        <div class="house" data-house="4">भाव ४</div>
+        <div class="house" data-house="5">भाव ५</div>
+        <div class="house" data-house="6">भाव ६</div>
+        <div class="house" data-house="7">भाव ७</div>
+        <div class="house" data-house="8">भाव ८</div>
+        <div class="house" data-house="9">भाव ९</div>
+        <div class="house" data-house="10">भाव १०</div>
+        <div class="house" data-house="11">भाव ११</div>
+        <div class="house" data-house="12">भाव १२</div>
+      </div>
+    </div>
 
-                <label for="planet-select">Select Planet to Add:</label>
-                <select id="planet-select">
-                    <option value="">--Select Planet--</option>
-                    <option value="surya">Su</option>
-                    <option value="chandra">Ch</option>
-                    <option value="mangal">Ma</option>
-                    <option value="budh">Bu</option>
-                    <option value="guru">Gu</option>
-                    <option value="shukra">Shu</option>
-                    <option value="shani">Sh</option>
-                    <option value="rahu">Ra</option>
-                    <option value="ketu">Ke</option>
-                </select>
-                
-                <button id="analyze-btn">Analyze Kundali</button>
-                <button id="reset-btn">Reset</button>
-            </div>
-        </section>
+    <button onclick="generateKundali()">कुण्डली व्याख्या बनाउनुहोस्</button>
 
-        <section id="output-section">
-            <h2>Kundali Analysis</h2>
-            <div id="analysis-results">
-                <p>Your Kundali analysis will be displayed here.</p>
-            </div>
-        </section>
-    </main>
+    <!-- Output Section -->
+    <div class="output" id="output">
+      <h2>कुण्डली व्याख्या</h2>
+      <div id="intro"></div>
+      <div id="graha"></div>
+      <div id="lagnaExp"></div>
+      <div id="houses"></div>
+      <div id="yogas"></div>
+      <div id="remedies"></div>
+    </div>
+  </div>
 
-    <footer>
-        <p>&copy; 2025 Kundali by Krish</p>
-    </footer>
+<script>
+function generateKundali() {
+  let lagna = document.getElementById("lagna").value;
 
-    <script src="data.js"></script>
-    <script src="script.js"></script>
+  let graha_list = ["सूर्य","चन्द्रमा","मङ्गल","बुध","गुरु","शुक्र","शनि","राहु","केतु"];
 
+  document.getElementById("intro").innerHTML = "<h3>परिचय</h3><p>यो कुण्डली परम्परागत उत्तर भारतीय शैलीमा तयार गरिएको हो। तपाईंले छानेको लग्न राशि <b>" + lagna + "</b> हो।</p>";
+
+  document.getElementById("graha").innerHTML = "<h3>ग्रहहरूको व्याख्या</h3><p>ग्रहहरू: " + graha_list.join(", ") + " ।</p>";
+
+  document.getElementById("lagnaExp").innerHTML = "<h3>लग्नको व्याख्या</h3><p><b>" + lagna + "</b> लग्नले व्यक्तिको शारीरिक बनावट, स्वभाव र जीवनको दिशा जनाउँछ।</p>";
+
+  document.getElementById("houses").innerHTML = "<h3>भावगत व्याख्या</h3><p>१२ वटा भाव अनुसार ग्रहहरूको प्रभाव व्याख्या यहाँ देखाइनेछ।</p>";
+
+  document.getElementById("yogas").innerHTML = "<h3>योग र दृष्टि विश्लेषण</h3><p>महत्वपूर्ण योग र दृष्टिहरू यहाँ सूचीकृत हुनेछन्।</p>";
+
+  document.getElementById("remedies").innerHTML = "<h3>उपाय र सुझाव</h3><p>जप, पूजा, र जीवनशैली सम्बन्धी सुझावहरू यहाँ देखाइनेछन्।</p>";
+}
+</script>
 </body>
 </html>
